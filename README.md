@@ -1,8 +1,8 @@
 # Harry's epic BIOS encrypted Artix Linux install for the Runit init system
 
-# login with artix, artix
-# lsblk and verify your drive names
-# placeholders will be used such as DISK, HOSTNAME, YOUR_TEXTEDITOR etc. 
+login with artix, artix
+lsblk and verify your drive names
+placeholders will be used such as DISK, HOSTNAME, YOUR_TEXTEDITOR etc. 
 
 dd if=/dev/urandom of=/dev/DISK # completely wipe data on the disk
 
@@ -48,21 +48,21 @@ hwclock --systohc
 
 YOUR_TEXTEDITOR /etc/locale.conf
 
-# input the following
+input the following
 
 export LANG="en_US.UTF-8"
 export LC_COLLATE="C"
 
-# save the file
+save the file
 
 YOUR_TEXTEDITOR /etc/locale.gen
 
-# uncomment your choice of locale, for example uncomment:
+uncomment your choice of locale, for example uncomment:
 
 en_US.UTF-8 UTF-8
 en_US ISO-8859-1
 
-# save the file
+save the file
 
 locale-gen
 
@@ -70,13 +70,13 @@ echo "HOSTNAME" > /etc/hostname # HOSTNAME can be whatever you like, its just th
 
 YOUR_TEXTEDITOR /etc/hosts
 
-# input the following
+input the following
 
 127.0.0.1	localhost
 ::1		localhost
 127.0.1.1	HOSTNAME.localdomain HOSTNAME
 
-# save the file
+save the file
 
 ln -s /etc/runit/sv/NetworkManager /etc/runit/runsvdir/current
 
@@ -94,17 +94,17 @@ passwd USERNAME # this user will not have sudo permissions by default
 	
 YOUR_TEXTEDITOR /etc/runit/sv/agetty-tty1/conf
 
-# on line 4, add the following:
+on line 4, add the following:
 	
 GETTY_ARGS="--noclear --autologin USERNAME"
 	
-# save the file 
+save the file 
 
 YOUR_TEXTEDITOR /etc/mkinitcpio.conf
 
-# find the HOOKS line, it should look something like this: HOOKS=(base undev autodetect modconf) etc. 
-# after "block", add "encrypt" and "lvm2"
-# save the file
+find the HOOKS line, it should look something like this: HOOKS=(base undev autodetect modconf) etc. 
+after "block", add "encrypt" and "lvm2"
+save the file
 
 mkinitcpio -p linux
 
@@ -118,16 +118,16 @@ artix-chroot /mnt bash
 
 YOUR_TEXTEDITOR /etc/default/drub
 
-# go to the bottom of the file and find the information you outputted.
-# you only need the UUIDs of crypto_LUKS and btrfs
-# YOURCRYPTUUID is the UUID of the encrypted partition
-# YOURROOTUUID is the UUID of the root partition
-# find GRUB_CMDLINE_LINUX_DEFAULT="loglevel=3 quiet"
-# add the following with your UUIDs.
+go to the bottom of the file and find the information you outputted.
+you only need the UUIDs of crypto_LUKS and btrfs
+YOURCRYPTUUID is the UUID of the encrypted partition
+YOURROOTUUID is the UUID of the root partition
+find GRUB_CMDLINE_LINUX_DEFAULT="loglevel=3 quiet"
+add the following with your UUIDs.
 
 GRUB_CMDLINE_LINUX_DEFAULT="loglevel=3 quiet cryptdevice=UUID=YOURCRYPTUUID:cryptlvm root=UUID=YOURROOTUUID"
 
-# save the file
+save the file
 
 grub-install /dev/DISK # do not install onto a partition, install over the entire disk
 
